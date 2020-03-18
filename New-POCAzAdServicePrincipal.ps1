@@ -8,41 +8,38 @@ function New-POCAzAdServicePrincipal {
 
     [Parameter()]
     [String]
-    $Plaintext,
+    $Plaintext = $(New-Guid),
 
     [Parameter()]
     [Int]
-    $POCDays = 15
+    $DurationDays = 15
   )
 
   try {
-    $AZURE_TENANTID = (Get-AzContext).Tenant.Id
-    if ($AZURE_TENANTID.Length -eq 0) { Throw "Not logged into an Azure." }
-
-    $AZURE_SAAS_SOLUTION = $SaasAppName
-    $AZURE_SAAS_POC_DURATION = $POCDays
-
-
-    $credentialParms = @{
+    $tenantId = (Get-AzContext).Tenant.Id
+    if ($tenantId.Length -eq 0) { Throw "Not logged into an Azure." }
+      $currentDate = Get-Date
+      $expirationDate = $currentDate.AddDays($DurationDays)
+      $credentialParms = @{
       TypeName = 'Microsoft.Azure.Commands.ActiveDirectory.PSADPasswordCredential'
       Property = @{
-        StartDate = Get-Date
-        EndDate = $(Get-Date).AddDays($AZURE_SAAS_POC_DURATION)
+        StartDate = $currentDate
+        EndDate = $expirationDate
         Password = $Plaintext
       }
     }
     $credentials = New-Object @credentialParms
 
     # Create Service Principal
-    $AZURE_SP = New-AzADServicePrincipal -DisplayName $AZURE_SAAS_SOLUTION `
+    $servicePrincipal = New-AzADServicePrincipal -DisplayName $SaasAppName `
                                          -PasswordCredential $credentials
 
     return [PSCustomObject]@{
-      DisplayName = $AZURE_SAAS_SOLUTION
-      ClientId = $AZURE_SP.ApplicationId.Guid
-      TenantId = $AZURE_TENANTID
+      DisplayName = $SaasAppName
+      ClientId = $servicePrincipal.ApplicationId.Guid
+      TenantId = $tenantId
       Secret = $Plaintext
-      Expiry = $AZURE_SP_CRED_EXPIRY
+      Expiry = $expirationDate
     }
   } catch {
     Write-Host ("ERROR: {0}" -f $_.Exception.Message)
