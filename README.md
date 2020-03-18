@@ -8,7 +8,7 @@ Azure Powershell code setup integration with SaaS enterprise monitoring
 Connect-AzAccount -SubscriptionName '<% SUBSCRIPTION_NAME %>'
 
 # Dot source commandlet
-. "./scripts/New-POCAzAdServicePrincipal.ps1"
+. "./New-POCAzAdServicePrincipal.ps1"
 
 $AZURE_SAAS_SOLUTION = '<% APPLICATION_NAME %>'
 
@@ -40,16 +40,15 @@ $AZURE_SUBSCRIPTIONS | % {
 }
 
 # Sample output
-RoleAssignmentId   : /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/providers/Microsoft.Authorization/roleAssignmen
-                     ts/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
-Scope              : /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-DisplayName        : <% APPLICATION_NAME %>
-SignInName         :
-RoleDefinitionName : Reader
-RoleDefinitionId   : bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
-ObjectId           : zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz
-ObjectType         : ServicePrincipal
-CanDelegate        : False
+# RoleAssignmentId   : /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/providers/Microsoft.Authorization/roleAssignments/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+# Scope              : /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+# DisplayName        : <% APPLICATION_NAME %>
+# SignInName         :
+# RoleDefinitionName : Reader
+# RoleDefinitionId   : bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
+# ObjectId           : zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz
+# ObjectType         : ServicePrincipal
+# CanDelegate        : False
 ```
 
 ## Deprovisioing Role and Service Principal After POC
